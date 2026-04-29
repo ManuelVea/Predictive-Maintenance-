@@ -51,8 +51,9 @@ The FrED PAL (Predictive Analysis and Learning) kit is an advanced predictive ma
 4. **Open the data recorder notebook:** `Data_Recording.ipynb`
 
 **📝 Workshop Notebooks:**
-- **`audio_recorder_shared.ipynb`** - Record and collect machinery audio samples locally
-- **`Predictive Maintenance Workshop.ipynb`** - Complete workflow and analysis
+- **`Data_Recording.ipynb`** - Record and collect machinery audio samples locally
+- **`Data_Analytics_Workshop.ipynb`** - Complete signals processing and machine learning pipeline for model training.
+- **`Model_Deployment.ipynb`** - Use the best-performing model for a live model deployment prediction.
 
 
 
