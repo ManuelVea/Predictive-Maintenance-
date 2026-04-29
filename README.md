@@ -48,7 +48,7 @@ The FrED PAL (Predictive Analysis and Learning) kit is an advanced predictive ma
 1. **Launch Anaconda Navigator** or use command line
 2. **Start Jupyter Notebook** from Anaconda Navigator or run `jupyter notebook`
 3. **Navigate to the repository folder** in Jupyter's file browser
-4. **Open the audio recorder notebook:** `audio_recorder_local.ipynb`
+4. **Open the data recorder notebook:** `Data_Recording.ipynb`
 
 **📝 Workshop Notebooks:**
 - **`audio_recorder_shared.ipynb`** - Record and collect machinery audio samples locally
