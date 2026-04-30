@@ -42,6 +42,19 @@ The FrED PAL (Predictive Analysis and Learning) kit is an advanced predictive ma
 
 
 ## 🛠️ Installation
+
+### Hardware Setup
+
+The FrED PAL kit assembly process is straightforward and requires minimal technical expertise. Begin by carefully assembling all the components according to the hardware schematic provided below. The sensor module should be securely mounted on the gearbox lid or target equipment surface to ensure optimal vibration capture. Once the mechanical assembly is complete, connect the power supply to the FrED PCB, providing the required 5V power and ground connections to all active components.
+
+Next, establish the signal pathway by connecting the TRS cable from the TRRS module to your computer's audio interface through the TRS to USB-C adapter. This connection allows the analog signals captured by the piezoelectric sensors to be transmitted to your computer for real-time processing and analysis. Ensure all connections are secure and properly aligned before powering on the system.
+
+#### Hardware Assembly Diagram
+
+![FrED PAL Hardware Setup](https://via.placeholder.com/800x400?text=FrED+PAL+Hardware+Assembly)
+
+The diagram above illustrates the complete hardware configuration including the piezoelectric sensors, AD828 amplifier module, TRRS interface board, and USB-C connectivity. Refer to this schematic during assembly to ensure correct component placement and connections.
+
 ### Jupyter Notebook Setup
 
 **🚀 Getting Started:**
@@ -101,6 +114,35 @@ graph TD
 - **Notebook Examples** - Interactive tutorials and examples
 - **API Reference** - Function and class documentation
 - **Best Practices** - Guidelines for optimal usage
+
+### FrED PAL Kit - Bill of Materials (BOM)
+
+The FrED PAL (Predictive Analysis and Learning) kit is an affordable, open-source hardware solution designed to bring advanced predictive maintenance capabilities to educational institutions and small-scale operations. The kit combines essential components for real-time machinery health monitoring through audio signal analysis. Each component has been carefully selected to balance cost-effectiveness with reliability and performance. The total kit cost is approximately **$25.48**, making it an accessible solution for implementing predictive maintenance systems without significant capital investment.
+
+#### Hardware Components Breakdown
+
+| Element | Description | Quantity | Cost x Unit (USD) | Total (USD) |
+|---------|-------------|----------|------------------|------------|
+| 1 | 0.787 in piezoelectric sensor | 1 | $0.53 | $1.07 |
+| 2 | AD828 board module | 1 | $2.50 | $2.50 |
+| 3 | TRRS board module | 1 | $2.56 | $2.56 |
+| 4 | Jumpers | 1 | $0.08 | $0.23 |
+| 5 | 57.26 grs of Sparkle PLA | 57.26 | $0.02 | $1.43 |
+| 6 | M3-4mm heat insert | 2 | $0.10 | $0.20 |
+| 7 | TRS to USB-C adapter | 1 | $14.99 | $14.99 |
+| 8 | TRS cable | 1 | $2.50 | $2.50 |
+| | | | **Total:** | **$25.48** |
+
+#### Component Details
+
+- **Piezoelectric Sensor**: Captures vibration and acoustic signals from machinery, converting mechanical motion into electrical signals for analysis
+- **AD828 Board Module**: High-speed operational amplifier module for signal conditioning and amplification
+- **TRRS Board Module**: Handles audio signal routing and interface compatibility
+- **Jumpers**: Electrical connectors for flexible circuit configuration
+- **Sparkle PLA Filament**: 3D-printed enclosure material for professional assembly
+- **M3-4mm Heat Inserts**: Hardware fasteners for durable assembly
+- **TRS to USB-C Adapter**: Bridges the analog audio interface with modern USB-C digital systems
+- **TRS Cable**: Standard audio connection cable for signal transmission
 
 ### Repository Folder Structure
 
