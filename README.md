@@ -51,7 +51,7 @@ Next, establish the signal pathway by connecting the TRS cable from the TRRS mod
 
 #### Hardware Assembly Diagram
 
-![FrED PAL Hardware Setup](https://via.placeholder.com/800x400?text=FrED+PAL+Hardware+Assembly)
+![FrED PAL Hardware Setup](images/hardware_setup.png)
 
 The diagram above illustrates the complete hardware configuration including the piezoelectric sensors, AD828 amplifier module, TRRS interface board, and USB-C connectivity. Refer to this schematic during assembly to ensure correct component placement and connections.
 
