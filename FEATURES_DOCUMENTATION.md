@@ -2,56 +2,57 @@
 
 This document explains the audio features extracted at each level in the `rich_features.py` pipeline. The pipeline offers four levels of feature extraction:
 
-- **Raw**: Direct audio signal values without feature extraction
-- **Basic**: Simple time-domain statistical features
-- **Standard**: Adds spectral, MFCC, and other common audio features  
+- **Raw Baseline**: Direct audio signal values without feature extraction
+- **Time-Domain Baseline**: Simple time-domain statistical features
+- **Time and Frequency-Domain Baseline**: Adds spectral, MFCC, and other common audio features  
 - **Advanced**: Includes time-series complexity features and higher-order statistics
 
 Each higher level includes all features from lower levels (except Raw, which stands alone).
 
 ## Signal Preprocessing and Filtering
 
-### High-Pass Filtering (New Feature)
-All audio signals are automatically preprocessed with a high-pass filter before feature extraction:
+### Low-Pass Filtering
+All audio signals are automatically preprocessed with a low-pass filter before feature extraction:
 
-- **Default Cutoff**: 50 Hz Butterworth filter (4th order)
-- **Purpose**: Removes low-frequency noise, vibrations, and DC offset
-- **Benefits**: Enhances signal-to-noise ratio for mechanical signature analysis
+- **Default Cutoff**: 500 Hz Butterworth filter (7th order)
+- **Purpose**: Removes high-frequency noise, electronic interference, and sampling artifacts
+- **Benefits**: Enhances signal-to-noise ratio for mechanical signature analysis by focusing on mechanical fault frequencies
 - **Configurable**: Can be adjusted or disabled per use case
 
 #### Filter Configuration Options:
 ```python
-# Default behavior (50 Hz high-pass enabled)
+# Default behavior (500 Hz low-pass enabled)
 data, sr = load_long_audio('audio.wav')
 
 # Custom cutoff frequency
-data, sr = load_long_audio('audio.wav', highpass_cutoff=100.0)
+data, sr = load_long_audio('audio.wav', lowpass_cutoff=1000.0)
 
 # Disable filtering entirely
-data, sr = load_long_audio('audio.wav', apply_highpass=False)
+data, sr = load_long_audio('audio.wav', apply_lowpass=False)
 
 # Set global defaults
-configure_default_filter(cutoff_freq=75.0, order=6)
+configure_default_filter(cutoff_freq=750.0, order=6)
 ```
 
 #### What the Filter Removes:
-- **DC Offset**: Constant amplitude shifts in the signal
-- **Low-Frequency Drift**: Slow variations unrelated to mechanical signatures
-- **Environmental Vibrations**: Building vibrations, footsteps, etc. (typically < 50 Hz)
-- **Power Line Harmonics**: 50/60 Hz electrical interference and harmonics
-- **Handling Noise**: Low-frequency mechanical noise that obscures the signal of interest
+- **High-Frequency Noise**: Electronic noise and sampling artifacts above cutoff
+- **Unwanted Harmonics**: High-frequency vibrations unrelated to mechanical signatures
+- **Electronic Interference**: Electrical noise and switching artifacts from measurement equipment
+- **Aliasing Artifacts**: High-frequency components that could cause aliasing during resampling
+- **Measurement Artifacts**: Sensor and recording chain noise typically above 500 Hz
 
 #### Technical Details:
 - **Filter Type**: Butterworth (maximally flat passband)
+- **Filter Order**: 7th order (provides steep roll-off after cutoff)
 - **Zero-Phase**: Uses `filtfilt` for forward-backward filtering (no phase distortion)
-- **Adaptive Cutoff**: Automatically adjusts if cutoff exceeds Nyquist frequency
+- **Adaptive Cutoff**: Automatically adjusts if cutoff exceeds Nyquist frequency (set to 95% of Nyquist as safety margin)
 - **Short Segment Protection**: Bypasses filtering for very short audio segments
 - **Processing Order**: Applied before resampling to prevent aliasing artifacts
 
-## Raw Features (N features, where N = audio segment length)
+## Raw Baseline (N features, where N = audio segment length)
 
 ### Direct Signal Representation
-The **Raw** feature level provides the unprocessed audio signal values directly as features. This approach:
+The **Raw Baseline** feature level provides the unprocessed audio signal values directly as features. This approach:
 
 - **No Feature Engineering**: Uses the raw amplitude values from the audio waveform
 - **Maximum Information Preservation**: Retains all temporal and amplitude information
@@ -83,7 +84,7 @@ The **Raw** feature level provides the unprocessed audio signal values directly 
 - **Segment Length**: Must be consistent across all samples for traditional ML
 - **Memory Requirements**: Significantly higher than engineered features
 
-## Basic Features (11 features)
+## Time-Domain Baseline (14 features)
 
 ### Time-Domain Statistics
 - **mean**: Average amplitude of the signal
@@ -105,9 +106,9 @@ The **Raw** feature level provides the unprocessed audio signal values directly 
 - **quantile_50**: 50th percentile (same as median)
 - **quantile_75**: 75th percentile of amplitude values
 
-## Standard Features (~50+ features)
+## Time and Frequency-Domain Baseline (~50+ features)
 
-Includes all **Basic** features plus:
+Includes all **Time-Domain Baseline** features plus:
 
 ### Spectral Features
 These analyze the frequency content of the signal:
@@ -160,27 +161,27 @@ Time-series complexity measures from EEG analysis, adapted for audio:
 ## Feature Selection Guidelines
 
 ### For Bearing Fault Detection:
-- **Raw**: Best for deep learning approaches when you have large datasets and want the model to learn optimal features automatically
-- **Basic**: Good starting point for simple fault vs normal classification with traditional ML
-- **Standard**: Recommended for most applications - spectral features capture bearing defect frequencies, MFCCs provide robust representation
+- **Raw Baseline**: Best for deep learning approaches when you have large datasets and want the model to learn optimal features automatically
+- **Time-Domain Baseline**: Good starting point for simple fault vs normal classification with traditional ML
+- **Time and Frequency-Domain Baseline**: Recommended for most applications - spectral features capture bearing defect frequencies, MFCCs provide robust representation
 - **Advanced**: Best for complex scenarios - entropy measures detect irregularities, Hjorth parameters capture fault dynamics
 
 ### Computational Considerations:
-- **Raw**: Lowest extraction cost, but highest training/inference cost due to dimensionality
-- **Basic**: Fastest overall, minimal dependencies
-- **Standard**: Moderate computation, requires `librosa` 
+- **Raw Baseline**: Lowest extraction cost, but highest training/inference cost due to dimensionality
+- **Time-Domain Baseline**: Fastest overall, minimal dependencies
+- **Time and Frequency-Domain Baseline**: Moderate computation, requires `librosa` 
 - **Advanced**: Highest feature extraction computation, includes entropy calculations
 
 ### Data Requirements:
-- **Raw**: Requires consistent segment lengths, works best with large datasets for deep learning
-- **Basic**: Works with any segment length, minimal data requirements
-- **Standard**: Requires segments long enough for meaningful spectral analysis (typically ≥0.1s)
+- **Raw Baseline**: Requires consistent segment lengths, works best with large datasets for deep learning
+- **Time-Domain Baseline**: Works with any segment length, minimal data requirements
+- **Time and Frequency-Domain Baseline**: Requires segments long enough for meaningful spectral analysis (typically ≥0.1s)
 - **Advanced**: Entropy measures need sufficient data points for reliable estimates (typically ≥0.5s)
 
 ### Model Recommendations:
-- **Raw**: Convolutional Neural Networks (CNNs), Recurrent Neural Networks (RNNs), Transformers
-- **Basic**: Logistic Regression, SVM, Decision Trees, Random Forest
-- **Standard**: All traditional ML algorithms, gradient boosting, ensemble methods
+- **Raw Baseline**: Convolutional Neural Networks (CNNs), Recurrent Neural Networks (RNNs), Transformers
+- **Time-Domain Baseline**: Logistic Regression, SVM, Decision Trees, Random Forest
+- **Time and Frequency-Domain Baseline**: All traditional ML algorithms, gradient boosting, ensemble methods
 - **Advanced**: Advanced ensemble methods, deep learning with engineered features
 
 ## Usage Example
@@ -198,19 +199,19 @@ X_basic, names_basic = extract_features_for_list(segments, sample_rate, level='b
 X_standard, names_standard = extract_features_for_list(segments, sample_rate, level='standard') 
 X_advanced, names_advanced = extract_features_for_list(segments, sample_rate, level='advanced')
 
-print(f"Raw features: {len(names_raw)} features (segment length)")
-print(f"Basic features: {len(names_basic)} features")
-print(f"Standard features: {len(names_standard)} features") 
-print(f"Advanced features: {len(names_advanced)} features")
+print(f"Raw Baseline: {len(names_raw)} features (segment length)")
+print(f"Time-Domain Baseline: {len(names_basic)} features")
+print(f"Time and Frequency-Domain Baseline: {len(names_standard)} features")
+print(f"Advanced: {len(names_advanced)} features")
 ```
 
 ### Feature Level Selection Guide
 
 | Level | Feature Count | Best For | Computational Cost | Model Types |
 |-------|---------------|----------|-------------------|-------------|
-| **Raw** | ~1000-40000 | Deep learning, end-to-end learning | Low extraction, High training | CNNs, RNNs, Transformers |
-| **Basic** | ~15 | Quick prototyping, simple classification | Very Low | Linear models, SVMs, Trees |
-| **Standard** | ~50 | General audio analysis, balanced approach | Medium | Most ML algorithms |
+| **Raw Baseline** | ~1000-40000 | Deep learning, end-to-end learning | Low extraction, High training | CNNs, RNNs, Transformers |
+| **Time-Domain Baseline** | ~15 | Quick prototyping, simple classification | Very Low | Linear models, SVMs, Trees |
+| **Time and Frequency-Domain Baseline** | ~50 | General audio analysis, balanced approach | Medium | Most ML algorithms |
 | **Advanced** | ~65 | Complex fault detection, research | High | Advanced ML, ensemble methods |
 
 ## Notes

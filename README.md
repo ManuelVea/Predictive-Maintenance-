@@ -102,6 +102,14 @@ graph TD
 - **API Reference** - Function and class documentation
 - **Best Practices** - Guidelines for optimal usage
 
+### Repository Folder Structure
+
+- **`data/audio`** - Storage location for all audio files collected during data recording and preprocessing. Contains sample audio data for training and testing the predictive maintenance models.
+
+- **`Preparation`** - Contains import functions and preprocessing utilities for data handling and signal processing. This folder includes modules for loading audio files, feature extraction, and data preparation before model training.
+
+- **`trained_models`** - Storage location for machine learning models. Contains our best-performing trained model used for real-time predictions and deployment in the Model_Deployment.ipynb notebook.
+
 ## 🐛 Troubleshooting
 
 ### Common Issues
