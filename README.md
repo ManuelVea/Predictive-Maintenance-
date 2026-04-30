@@ -18,7 +18,7 @@ A comprehensive predictive maintenance system that uses audio analysis and machi
 
 ## 🎯 Overview
 
-The FrED PAL (Predictive Analysis and Learning) kit is an advanced predictive maintenance platform that leverages:
+The FrED PAL (Predictive Analysis and Learning) kit is a low-cost educational predictive maintenance platform that leverages:
 - **Audio Signal Processing** for real-time machinery health monitoring
 - **Machine Learning Models** for fault classification and prediction
 - **Interactive Jupyter Notebooks** for data collection and analysis
